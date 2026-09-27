@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalogue
+data:
+  MONGO: "true"
+  MONGO_URL: "mongodb://mongodb:27017/catalogue"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue-dp
+  namespace: roboshop
+  labels:
+    project: roboshop
+    component: catalogue
+    tier: backend
+    environment: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      project: roboshop
+      component: catalogue
+      tier: backend
+      environment: development
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        component: catalogue
+        tier: backend
+        environment: development
+    spec:
+      containers:
+      - name: catalogue
+        image: 9959087127/catalogue:v1
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: catalogue
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          failureThreshold: 1
+          periodSeconds: 15
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          failureThreshold: 1
+          periodSeconds: 15
+
+--- 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalogue
+  namespace: roboshop
+spec:
+  selector:
+    project: roboshop
+    component: catalogue
+    tier: backend
+    environment: development
+  ports:
+  - protocol: TCP
+    port: 8080 # service port
+    targetPort: 8080   #container port
+
+---
+
+apiVersion: autoscaling/v2
+kind: HorizontalAutoScaler
+metadata:
+  name: catalogue
+  namespace: roboshop
+  labels:
+    project: roboshop
+    component: catalogue
+    tier: backend
+    environment: development
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: catalogue
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 5
