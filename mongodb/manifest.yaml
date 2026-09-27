@@ -32,7 +32,7 @@ metadata:
     component: mongodb
     tier: db
 spec:
-  clusteerIP: None
+  clusterIP: None
   selector:
     project: roboshop
     environment: dev
