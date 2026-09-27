@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: mysql
 data:
-  my.cnf |
+  my.cnf: |
     [mysqld]
     innodb_redo_log_capacity = 2G
 
@@ -42,7 +42,7 @@ metadata:
     component: mysql
     tier: db
 spec:
-  clusteerIP: None
+  clusterIP: None
   selector:
     project: roboshop
     environment: dev
@@ -82,7 +82,7 @@ spec:
         image: 9959087127/mysql:v1
         volumeMounts:
         - name: mysql
-          mountPath: /data/db
+          mountpath: /data/db
         - name: mysql-config
           mountpath: /etc/mysql/conf.d/my.cnf
           subPath: my.cnf
