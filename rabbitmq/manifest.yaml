@@ -17,8 +17,8 @@ spec:
     tier: db
   ports:
   - protocol: TCP
-    port: 6379
-    targetPort: 6379
+    port: 5672
+    targetPort: 5672
     
 ---
 
@@ -40,8 +40,8 @@ spec:
     tier: db
   ports:
   - protocol: TCP
-    port: 6379
-    targetPort: 6379
+    port: 5672
+    targetPort: 5672
 
 ---
 

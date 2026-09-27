@@ -81,7 +81,7 @@ spec:
 ---
 
 apiVersion: autoscaling/v2
-kind: HorizontalAutoScaler
+kind: HorizontalAutoscaler
 metadata:
   name: catalogue
   namespace: roboshop
