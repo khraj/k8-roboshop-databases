@@ -82,9 +82,9 @@ spec:
         image: 9959087127/mysql:v1
         volumeMounts:
         - name: mysql
-          mountpath: /data/db
+          mountPath: /data/db
         - name: mysql-config
-          mountpath: /etc/mysql/conf.d/my.cnf
+          mountPath: /etc/mysql/conf.d/my.cnf
           subPath: my.cnf
       volumes:
       - name: mysql-config
